@@ -4,7 +4,7 @@ import items from './items';
 
 export default class App extends React.Component {
     state = {
-        data:[]
+        data: []
     }
 
     render() {
@@ -23,6 +23,7 @@ export default class App extends React.Component {
     renderNames() {
         return <tr>
             <th>item_id</th>
+            <th>Name</th>
             <th>Diff</th>
             <th>buy_price_max</th>
             <th>sell_price_min</th>
@@ -42,15 +43,20 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
-        let listIDs = items.map(i => i.LocalizationNameVariable.replace("@ITEMS_", ""));
+        let listNameIDs = items.map(i =>
+            [this.getLocalizedName(i), i.LocalizationNameVariable.replace("@ITEMS_", "")]);
 
-        for (let index = 0; index < listIDs.length; index++) {
-            let items1 = await this.fetchWithID(listIDs[index]);
-
-            this.setState(p=>({data: p.data.concat(this.buildData(items1))}));
+        for (let index = 0; index < listNameIDs.length; index++) {
+            let item = await this.fetchWithID(listNameIDs[index][1]);
+            let name = listNameIDs[index][0];
+            this.setState(p => ({data: p.data.concat(this.buildData(item, name))}));
 
         }
 
+    }
+
+    getLocalizedName(i) {
+        return i.LocalizedNames && i.LocalizedNames.filter(n => n.Key === "EN-US")[0].Value;
     }
 
     async fetchWithID(id) {
@@ -59,23 +65,26 @@ export default class App extends React.Component {
         return await response.json();
     }
 
-    buildData(data) {
-        if(data.length < 2)
+    buildData(data, name) {
+        if (data.length < 2)
             return [];
 
         let dataCaerleon = data.filter(e => e.city === "Caerleon");
         let dataBlackMarket = data.filter(e => e.city === "Black Market");
 
-        let result =  dataBlackMarket.map(bm => this.buildRow(bm, dataCaerleon.filter(c => c.item_id === bm.item_id)[0]));
+        function caerleon(bm) {
+            return dataCaerleon.filter(c => c.item_id === bm.item_id);
+        }
+
+        let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0], name));
         console.log(result)
         result = result.filter(row => row[1] > 0);
         return result;
     }
 
-    buildRow(itemBlackMarket, itemCaerleon) {
-        console.log({itemBlackMarket, itemCaerleon})
+    buildRow(itemBlackMarket, itemCaerleon, name = "") {
         let diff = itemBlackMarket.buy_price_max - itemCaerleon.sell_price_min;
-        return [itemBlackMarket.item_id, diff, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
+        return [itemBlackMarket.item_id, name, diff, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
             itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date]
     }
 }
