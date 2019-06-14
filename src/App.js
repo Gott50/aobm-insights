@@ -32,9 +32,9 @@ export default class App extends React.Component {
         </tr>;
     }
 
-    renderRow(dataRow = []) {
-        return <tr>
-            {dataRow.map(data => <td>{data}</td>)}
+    renderRow(dataRow = [], index=0) {
+        return <tr key={index}>
+            {dataRow.map((data, index)=> <td key={index}>{data}</td>)}
         </tr>;
     }
 
