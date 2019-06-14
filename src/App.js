@@ -45,13 +45,12 @@ export default class App extends React.Component {
     async componentDidMount() {
         let listNameIDs = items.map(i => i.LocalizationNameVariable.replace("@ITEMS_", ""));
 
-        for (let index = 0; index < listNameIDs.length; index += 200) {
-            let id = listNameIDs.slice(index, index + 200);
+        for (let index = 0; index < listNameIDs.length; index += 250) {
+            let id = listNameIDs.slice(index, index + 250);
             let item = await this.fetchWithID(id);
             this.setState(p => ({data: p.data.concat(this.buildData(item))}));
-
         }
-
+        console.log("DONE")
     }
 
     getLocalizedName(id) {
@@ -78,7 +77,7 @@ export default class App extends React.Component {
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
         console.log(result)
-        // result = result.filter(row => row[1] > 0);
+        result = result.filter(row => row[1] > 0);
         return result;
     }
 
