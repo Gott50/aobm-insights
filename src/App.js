@@ -50,7 +50,7 @@ export default class App extends React.Component {
             let item = await this.fetchWithID(id);
             this.setState(p => ({data: p.data.concat(this.buildData(item))}));
         }
-        console.log("DONE")
+        alert("DONE")
     }
 
     getLocalizedName(id) {
