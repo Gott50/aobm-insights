@@ -43,20 +43,20 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
-        let listNameIDs = items.map(i =>
-            [this.getLocalizedName(i), i.LocalizationNameVariable.replace("@ITEMS_", "")]);
+        let listNameIDs = items.map(i => i.LocalizationNameVariable.replace("@ITEMS_", ""));
 
-        for (let index = 0; index < listNameIDs.length; index++) {
-            let item = await this.fetchWithID(listNameIDs[index][1]);
-            let name = listNameIDs[index][0];
-            this.setState(p => ({data: p.data.concat(this.buildData(item, name))}));
+        for (let index = 0; index < listNameIDs.length; index += 200) {
+            let id = listNameIDs.slice(index, index + 200);
+            let item = await this.fetchWithID(id);
+            this.setState(p => ({data: p.data.concat(this.buildData(item))}));
 
         }
 
     }
 
-    getLocalizedName(i) {
-        return i.LocalizedNames && i.LocalizedNames.filter(n => n.Key === "EN-US")[0].Value;
+    getLocalizedName(id) {
+        let i = items.filter(i =>i.LocalizationNameVariable.indexOf(id) !== -1)[0];
+        return i && i.LocalizedNames.filter(n => n.Key === "EN-US")[0].Value;
     }
 
     async fetchWithID(id) {
@@ -65,7 +65,7 @@ export default class App extends React.Component {
         return await response.json();
     }
 
-    buildData(data, name) {
+    buildData(data){
         if (data.length < 2)
             return [];
 
@@ -76,13 +76,14 @@ export default class App extends React.Component {
             return dataCaerleon.filter(c => c.item_id === bm.item_id);
         }
 
-        let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0], name));
+        let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
         console.log(result)
-        result = result.filter(row => row[1] > 0);
+        // result = result.filter(row => row[1] > 0);
         return result;
     }
 
-    buildRow(itemBlackMarket, itemCaerleon, name = "") {
+    buildRow(itemBlackMarket, itemCaerleon) {
+        let name = this.getLocalizedName(itemBlackMarket.item_id)
         let diff = itemBlackMarket.buy_price_max - itemCaerleon.sell_price_min;
         return [itemBlackMarket.item_id, name, diff, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
             itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date]
