@@ -44,10 +44,13 @@ export default class App extends React.Component {
     }
 
     async componentDidMount() {
-        let listNameIDs = items.map(i => i.LocalizationNameVariable.replace("@ITEMS_", ""));
+        let listNameIDs = items.map(i => {
+            let id = i.LocalizationNameVariable.replace("@ITEMS_", "");
+            return `${id},${id}@1,${id}@2,${id}@3`;
+        });
 
-        for (let index = 0; index < listNameIDs.length; index += 250) {
-            let id = listNameIDs.slice(index, index + 250);
+        for (let index = 0; index < listNameIDs.length; index += 40) {
+            let id = listNameIDs.slice(index, index + 40);
             let item = await this.fetchWithID(id);
             this.setState(p => {
                 let data = p.data.concat(this.buildData(item));
@@ -59,7 +62,8 @@ export default class App extends React.Component {
     }
 
     getLocalizedName(id) {
-        let i = items.filter(i =>i.LocalizationNameVariable.indexOf(id) !== -1)[0];
+        let id_name = id.split("@")[0];
+        let i = items.filter(i =>i.LocalizationNameVariable.indexOf(id_name) !== -1)[0];
         return i && i.LocalizedNames.filter(n => n.Key === "EN-US")[0].Value;
     }
 
@@ -86,7 +90,7 @@ export default class App extends React.Component {
     }
 
     buildRow(itemBlackMarket, itemCaerleon) {
-        if (itemBlackMarket.buy_price_max <= 0 || itemCaerleon.sell_price_min <= 0)
+        if (!itemBlackMarket || !itemCaerleon || itemBlackMarket.buy_price_max <= 0 || itemCaerleon.sell_price_min <= 0)
             return []
 
         let name = this.getLocalizedName(itemBlackMarket.item_id)
