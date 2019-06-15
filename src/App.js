@@ -25,6 +25,7 @@ export default class App extends React.Component {
             <th>item_id</th>
             <th>Name</th>
             <th>Diff</th>
+            <th>Margin</th>
             <th>buy_price_max</th>
             <th>sell_price_min</th>
             <th>buy_price_max_date</th>
@@ -76,15 +77,15 @@ export default class App extends React.Component {
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        console.log(result)
-        result = result.filter(row => row[1] > 0);
+        result = result.filter(row => row[2] > 0);
         return result;
     }
 
     buildRow(itemBlackMarket, itemCaerleon) {
         let name = this.getLocalizedName(itemBlackMarket.item_id)
         let diff = itemBlackMarket.buy_price_max - itemCaerleon.sell_price_min;
-        return [itemBlackMarket.item_id, name, diff, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
+        let margin = diff / itemBlackMarket.buy_price_max;
+        return [itemBlackMarket.item_id, name, diff, margin, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
             itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date]
     }
 }
