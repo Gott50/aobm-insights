@@ -89,8 +89,14 @@ export default class App extends React.Component {
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        result = result.filter(row => row[4] > 0);
+        result = result.filter(row => row[5] > 0.1);
+        result = result.filter(row => row[4] > 5000);
+        result = result.filter(row => this.isJoung(row[8]));
         return result;
+    }
+
+    isJoung(date) {
+        return new Date(date) >= new Date(Date.now() - 5 * 3600 * 1000);
     }
 
     buildRow(itemBlackMarket, itemCaerleon) {
