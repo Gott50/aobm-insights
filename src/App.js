@@ -49,7 +49,11 @@ export default class App extends React.Component {
         for (let index = 0; index < listNameIDs.length; index += 250) {
             let id = listNameIDs.slice(index, index + 250);
             let item = await this.fetchWithID(id);
-            this.setState(p => ({data: p.data.concat(this.buildData(item))}));
+            this.setState(p => {
+                let data = p.data.concat(this.buildData(item));
+                data.sort((a, b) => b[3] - a[3]);
+                return {data};
+            });
         }
         alert("DONE")
     }
@@ -82,6 +86,9 @@ export default class App extends React.Component {
     }
 
     buildRow(itemBlackMarket, itemCaerleon) {
+        if (itemBlackMarket.buy_price_max <= 0 || itemCaerleon.sell_price_min <= 0)
+            return []
+
         let name = this.getLocalizedName(itemBlackMarket.item_id)
         let diff = itemBlackMarket.buy_price_max - itemCaerleon.sell_price_min;
         let margin = diff / itemBlackMarket.buy_price_max;
