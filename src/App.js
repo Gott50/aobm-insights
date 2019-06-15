@@ -89,7 +89,7 @@ export default class App extends React.Component {
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        result = result.filter(row => row[5] > 0);
+        result = result.filter(row => row[4] > 0);
         return result;
     }
 
