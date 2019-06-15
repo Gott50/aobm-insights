@@ -63,9 +63,12 @@ export default class App extends React.Component {
             let id = listNameIDs.slice(index, index + 40);
             let item = await this.fetchWithID(id);
             this.setState(p => {
-                let data = p.data.concat(this.buildData(item));
+                let newData = this.buildData(item);
+                let pData = p.data.filter(i => !newData.filter(n => i[0]===n[0] && i[1]===n[1]).length);
+                let data = pData.concat(newData);
                 // data.sort((a, b) => b[5] - a[5]);
-                data.sort((a, b) => new Date(b[8]) - new Date(a[8]));
+
+                data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
                 return {data};
             });
         }
