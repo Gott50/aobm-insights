@@ -56,7 +56,8 @@ export default class App extends React.Component {
             let item = await this.fetchWithID(id);
             this.setState(p => {
                 let data = p.data.concat(this.buildData(item));
-                data.sort((a, b) => b[5] - a[5]);
+                // data.sort((a, b) => b[5] - a[5]);
+                data.sort((a, b) => new Date(b[8]) - new Date(a[8]));
                 return {data};
             });
         }
