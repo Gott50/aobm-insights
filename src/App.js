@@ -106,8 +106,9 @@ export default class App extends React.Component {
 
         let name = this.getLocalizedName(itemBlackMarket.item_id)
         let diff = itemBlackMarket.buy_price_max - itemCaerleon.sell_price_min;
-        let margin = diff / itemBlackMarket.buy_price_max;
-        return [itemBlackMarket.item_id, itemBlackMarket.quality, itemCaerleon.quality, name, diff, margin, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
+        let margin = 100 * diff / itemBlackMarket.buy_price_max;
+
+        return [itemBlackMarket.item_id, itemBlackMarket.quality, itemCaerleon.quality, name, diff, margin.toFixed(2), itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
             itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date]
     }
 }
