@@ -20,6 +20,14 @@ export default class App extends React.Component {
         );
     }
 
+    componentDidMount() {
+        const componentDidMount = this.componentDidMount.bind(this);
+        setTimeout(() => {
+            console.log("run fetchData()")
+            this.fetchData().then(componentDidMount);
+        }, 0);
+    }
+
     renderNames() {
         return <tr>
             <th>item_id</th>
@@ -45,7 +53,7 @@ export default class App extends React.Component {
         return dataRows.map(this.renderRow);
     }
 
-    async componentDidMount() {
+    async fetchData() {
         let listNameIDs = items.map(i => {
             let id = i.LocalizationNameVariable.replace("@ITEMS_", "");
             return `${id},${id}@1,${id}@2,${id}@3`;
@@ -61,7 +69,6 @@ export default class App extends React.Component {
                 return {data};
             });
         }
-        alert("DONE")
     }
 
     getLocalizedName(id) {
