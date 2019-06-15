@@ -83,7 +83,9 @@ export default class App extends React.Component {
         let dataBlackMarket = data.filter(e => e.city === "Black Market");
 
         function caerleon(bm) {
-            return dataCaerleon.filter(c => c.item_id === bm.item_id && c.quality >= bm.quality);
+            let items = dataCaerleon.filter(c => c.item_id === bm.item_id && c.quality >= bm.quality);
+            items.sort((a, b) => b.sell_price_min - a.sell_price_min);
+            return items;
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
