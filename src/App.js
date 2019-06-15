@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import items from './items';
+import * as async from "async";
 
 export default class App extends React.Component {
     state = {
@@ -23,10 +24,36 @@ export default class App extends React.Component {
     componentDidMount() {
         const componentDidMount = this.componentDidMount.bind(this);
         setTimeout(() => {
-            console.log("run fetchData()")
-            this.fetchData().then(componentDidMount);
+            console.log("run Loop")
+
+            let listNameIDs = items.map(i => {
+                let id = i.LocalizationNameVariable.replace("@ITEMS_", "");
+                return `${id},${id}@1,${id}@2,${id}@3`;
+            });
+
+            let paraList = listNameIDs.reduce((memo, value, index) => {
+                if (index % 40 == 0 && index !== 0) memo.push([])
+                memo[memo.length - 1].push(value)
+                return memo
+            }, [[]]);
+            async.each(paraList, this.fetchData.bind(this), componentDidMount);
         }, 0);
     }
+
+    fetchData(id, callback) {
+        this.fetchWithID(id).then(item => {
+            this.setState(p => {
+                let newData = this.buildData(item);
+                let pData = p.data.filter(i => !newData.filter(n => i[0] === n[0] && i[1] === n[1]).length);
+                let data = pData.concat(newData);
+                // data.sort((a, b) => b[5] - a[5]);
+
+                data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
+                return {data};
+            });
+        }).then(callback);
+    }
+
 
     renderNames() {
         return <tr>
@@ -51,27 +78,6 @@ export default class App extends React.Component {
 
     renderRows(dataRows = []) {
         return dataRows.map(this.renderRow);
-    }
-
-    async fetchData() {
-        let listNameIDs = items.map(i => {
-            let id = i.LocalizationNameVariable.replace("@ITEMS_", "");
-            return `${id},${id}@1,${id}@2,${id}@3`;
-        });
-
-        for (let index = 0; index < listNameIDs.length; index += 40) {
-            let id = listNameIDs.slice(index, index + 40);
-            let item = await this.fetchWithID(id);
-            this.setState(p => {
-                let newData = this.buildData(item);
-                let pData = p.data.filter(i => !newData.filter(n => i[0]===n[0] && i[1]===n[1]).length);
-                let data = pData.concat(newData);
-                // data.sort((a, b) => b[5] - a[5]);
-
-                data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
-                return {data};
-            });
-        }
     }
 
     getLocalizedName(id) {
@@ -100,14 +106,14 @@ export default class App extends React.Component {
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        result = result.filter(row => row[5] > 10);
-        result = result.filter(row => row[4] > 5000);
+        result = result.filter(row => row[5] > 5);
+        result = result.filter(row => row[4] > 2000);
         result = result.filter(row => this.isJoung(row[8]));
         return result;
     }
 
     isJoung(date) {
-        return new Date(date) >= new Date(Date.now() - 5 * 3600 * 1000);
+        return new Date(date) >= new Date(Date.now() - 3 * 3600 * 1000);
     }
 
     buildRow(itemBlackMarket, itemCaerleon) {
