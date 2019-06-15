@@ -23,6 +23,8 @@ export default class App extends React.Component {
     renderNames() {
         return <tr>
             <th>item_id</th>
+            <th>BQ</th>
+            <th>SQ</th>
             <th>Name</th>
             <th>Diff</th>
             <th>Margin</th>
@@ -54,7 +56,7 @@ export default class App extends React.Component {
             let item = await this.fetchWithID(id);
             this.setState(p => {
                 let data = p.data.concat(this.buildData(item));
-                data.sort((a, b) => b[3] - a[3]);
+                data.sort((a, b) => b[5] - a[5]);
                 return {data};
             });
         }
@@ -68,8 +70,8 @@ export default class App extends React.Component {
     }
 
     async fetchWithID(id) {
-        let response = await fetch("https://www.albion-online-data.com/api/v1/stats/prices/" + id +
-            "?locations=Caerleon,Black Market");
+        let response = await fetch("https://www.albion-online-data.com/api/v2/stats/prices/" + id +
+            "?locations=Caerleon,Black Market&qualities=1,2,3,4,5,6");
         return await response.json();
     }
 
@@ -81,11 +83,11 @@ export default class App extends React.Component {
         let dataBlackMarket = data.filter(e => e.city === "Black Market");
 
         function caerleon(bm) {
-            return dataCaerleon.filter(c => c.item_id === bm.item_id);
+            return dataCaerleon.filter(c => c.item_id === bm.item_id && c.quality >= bm.quality);
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        result = result.filter(row => row[2] > 0);
+        result = result.filter(row => row[5] > 0);
         return result;
     }
 
@@ -96,7 +98,7 @@ export default class App extends React.Component {
         let name = this.getLocalizedName(itemBlackMarket.item_id)
         let diff = itemBlackMarket.buy_price_max - itemCaerleon.sell_price_min;
         let margin = diff / itemBlackMarket.buy_price_max;
-        return [itemBlackMarket.item_id, name, diff, margin, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
+        return [itemBlackMarket.item_id, itemBlackMarket.quality, itemCaerleon.quality, name, diff, margin, itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
             itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date]
     }
 }
