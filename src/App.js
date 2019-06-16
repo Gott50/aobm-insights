@@ -8,6 +8,11 @@ export default class App extends React.Component {
         data: []
     }
 
+    constructor(props) {
+        super(props);
+        this.playAudio = () => {this.audio.play();}
+    }
+
     render() {
         return (
             <div className="App">
@@ -17,6 +22,11 @@ export default class App extends React.Component {
                     {this.renderRows(this.state.data)}
                     </tbody>
                 </table>
+                <audio ref={(audio) => {this.audio = audio;}}>
+                    <source src="/notification.mp3" type="audio/mpeg"/>
+                </audio>
+
+                <button className="btn btn-info" onClick={this.playAudio}>audio</button>
             </div>
         );
     }
