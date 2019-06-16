@@ -25,8 +25,6 @@ export default class App extends React.Component {
                 <audio ref={(audio) => {this.audio = audio;}}>
                     <source src="/notification.mp3" type="audio/mpeg"/>
                 </audio>
-
-                <button className="btn btn-info" onClick={this.playAudio}>audio</button>
             </div>
         );
     }
@@ -59,6 +57,10 @@ export default class App extends React.Component {
                 // data.sort((a, b) => b[5] - a[5]);
 
                 data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
+
+                if (p.data[0] !== data[0])
+                    this.playAudio();
+
                 return {data};
             });
         }).then(callback);
