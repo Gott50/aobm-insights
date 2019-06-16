@@ -57,7 +57,7 @@ export default class App extends React.Component {
                 return memo
             }, [[]]);
             async.each(paraList, this.fetchData.bind(this), componentDidMount);
-        }, 0);
+        }, 1000);
     }
 
     fetchData(id, callback) {
