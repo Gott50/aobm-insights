@@ -59,6 +59,10 @@ export default class App extends React.Component {
                 let data = pData.concat(newData);
                 // data.sort((a, b) => b[5] - a[5]);
 
+                data = data.filter(row => Number(row[5]) >= this.state.minMargin);
+                data = data.filter(row => Number(row[4]) >= this.state.minDiff);
+                data = data.filter(row => this.isJoung(row[8]));
+
                 data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
 
                 if (p.data[0] !== data[0])
@@ -121,9 +125,6 @@ export default class App extends React.Component {
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        result = result.filter(row => row[5] > this.state.minMargin);
-        result = result.filter(row => row[4] > this.state.minDiff);
-        result = result.filter(row => this.isJoung(row[8]));
         return result;
     }
 
