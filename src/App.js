@@ -5,7 +5,10 @@ import * as async from "async";
 
 export default class App extends React.Component {
     state = {
-        data: []
+        data: [],
+        minMargin: 10,
+        minDiff: 10000,
+        maxAge: 1,
     }
 
     constructor(props) {
@@ -118,14 +121,14 @@ export default class App extends React.Component {
         }
 
         let result = dataBlackMarket.map(bm => this.buildRow(bm, caerleon(bm)[0]));
-        result = result.filter(row => row[5] > 5);
-        result = result.filter(row => row[4] > 2000);
+        result = result.filter(row => row[5] > this.state.minMargin);
+        result = result.filter(row => row[4] > this.state.minDiff);
         result = result.filter(row => this.isJoung(row[8]));
         return result;
     }
 
     isJoung(date) {
-        return new Date(date) >= new Date(Date.now() - 3 * 3600 * 1000);
+        return new Date(date) >= new Date(Date.now() - (2 + this.state.maxAge) * 3600 * 1000);
     }
 
     buildRow(itemBlackMarket, itemCaerleon) {
