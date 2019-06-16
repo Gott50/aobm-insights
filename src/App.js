@@ -6,8 +6,8 @@ import * as async from "async";
 export default class App extends React.Component {
     state = {
         data: [],
-        minMargin: 10,
         minDiff: 10000,
+        minMargin: 10,
         maxAge: 1,
     }
 
@@ -19,6 +19,15 @@ export default class App extends React.Component {
     render() {
         return (
             <div className="App">
+                <label>minDiff:
+                    <input type="number" value={this.state.minDiff} onChange={event => this.setState({minDiff: event.target.value})}/>
+                </label>
+                <label>minMargin:
+                    <input type="number" value={this.state.minMargin} onChange={event => this.setState({minMargin: event.target.value})}/>
+                </label>
+                <label>maxAge:
+                    <input type="number" value={this.state.maxAge} onChange={event => this.setState({maxAge: event.target.value})}/>
+                </label>
                 <table style={{width: "100%"}}>
                     <tbody>
                     {this.renderNames()}
