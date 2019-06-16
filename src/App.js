@@ -74,7 +74,7 @@ export default class App extends React.Component {
 
                 data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
 
-                if (p.data[0] !== data[0])
+                if (String(p.data[0]) !== String(data[0]))
                     this.playAudio();
 
                 return {data};
