@@ -35,7 +35,7 @@ export default class App extends React.Component {
                     </tbody>
                 </table>
                 <audio ref={(audio) => {this.audio = audio;}}>
-                    <source src="/notification.mp3" type="audio/mpeg"/>
+                    <source src="/notification.m4a" type="audio/mpeg"/>
                 </audio>
             </div>
         );
@@ -52,7 +52,7 @@ export default class App extends React.Component {
             });
 
             let paraList = listNameIDs.reduce((memo, value, index) => {
-                if (index % 40 == 0 && index !== 0) memo.push([])
+                if (index % 40 === 0 && index !== 0) memo.push([])
                 memo[memo.length - 1].push(value)
                 return memo
             }, [[]]);
