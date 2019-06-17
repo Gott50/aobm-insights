@@ -64,6 +64,7 @@ export default class App extends React.Component {
         this.fetchWithID(id).then(item => {
             this.setState(p => {
                 let newData = this.buildData(item);
+                newData = newData.filter(i => !p.data.filter(n => i[8] === n[8] && i[9] === n[9]).length);
                 let pData = p.data.filter(i => !newData.filter(n => i[0] === n[0] && i[1] === n[1]).length);
                 let data = pData.concat(newData);
                 // data.sort((a, b) => b[5] - a[5]);
@@ -99,13 +100,30 @@ export default class App extends React.Component {
     }
 
     renderRow(dataRow = [], index=0) {
+        let dataTD = [...dataRow];
+        for (let i = dataRow.length - 2; i < dataRow.length; i++) {
+            dataTD[i] = <input type="checkbox"
+                               checked={dataRow[i]}
+            onChange={this.handleChaneOfCheckBox(index, i).bind(this)}
+            />
+        }
+
         return <tr key={index}>
-            {dataRow.map((data, index)=> <td key={index}>{data}</td>)}
+            {dataTD.map((data, index)=> <td key={index}>{data}</td>)}
         </tr>;
     }
 
+    handleChaneOfCheckBox = (index, i) => (event) => {
+        const checked = event.target.checked;
+        return this.setState(p => {
+            let data = p.data;
+            data[index][i] = checked;
+            return {data};
+        });
+    }
+
     renderRows(dataRows = []) {
-        return dataRows.map(this.renderRow);
+        return dataRows.map(this.renderRow.bind(this));
     }
 
     getLocalizedName(id) {
@@ -150,6 +168,6 @@ export default class App extends React.Component {
         let margin = 100 * diff / itemBlackMarket.buy_price_max;
 
         return [itemBlackMarket.item_id, itemBlackMarket.quality, itemCaerleon.quality, name, diff, margin.toFixed(2), itemBlackMarket.buy_price_max, itemCaerleon.sell_price_min,
-            itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date]
+            itemBlackMarket.buy_price_max_date, itemCaerleon.sell_price_min_date, false, false]
     }
 }
