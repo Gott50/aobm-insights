@@ -20,13 +20,13 @@ export default class App extends React.Component {
         return (
             <div className="App">
                 <label>minDiff:
-                    <input type="number" value={this.state.minDiff} onChange={event => this.setState({minDiff: event.target.value})}/>
+                    <input type="number" value={this.state.minDiff} onChange={event => this.setState({minDiff: Number(event.target.value)})}/>
                 </label>
                 <label>minMargin:
-                    <input type="number" value={this.state.minMargin} onChange={event => this.setState({minMargin: event.target.value})}/>
+                    <input type="number" value={this.state.minMargin} onChange={event => this.setState({minMargin: Number(event.target.value)})}/>
                 </label>
                 <label>maxAge:
-                    <input type="number" value={this.state.maxAge} onChange={event => this.setState({maxAge: event.target.value})}/>
+                    <input type="number" value={this.state.maxAge} onChange={event => this.setState({maxAge: Number(event.target.value)})}/>
                 </label>
                 <table style={{width: "100%"}}>
                     <tbody>
