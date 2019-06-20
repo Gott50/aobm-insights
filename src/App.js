@@ -9,6 +9,7 @@ export default class App extends React.Component {
         minDiff: 10000,
         minMargin: 10,
         maxAge: 1,
+        timeout: 1000,
     }
 
     constructor(props) {
@@ -27,6 +28,9 @@ export default class App extends React.Component {
                 </label>
                 <label>maxAge:
                     <input type="number" value={this.state.maxAge} onChange={event => this.setState({maxAge: Number(event.target.value)})}/>
+                </label>
+                <label>timeout:
+                    <input type="number" value={this.state.timeout} onChange={event => this.setState({timeout: Number(event.target.value)})}/>
                 </label>
                 <table style={{width: "100%"}}>
                     <tbody>
@@ -57,7 +61,7 @@ export default class App extends React.Component {
                 return memo
             }, [[]]);
             async.each(paraList, this.fetchData.bind(this), componentDidMount);
-        }, 1000);
+        }, this.state.timeout);
     }
 
     fetchData(id, callback) {
