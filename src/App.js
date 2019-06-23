@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import './index.css'
 import items from './items';
 import * as async from "async";
 
