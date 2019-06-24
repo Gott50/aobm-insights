@@ -85,7 +85,7 @@ export default class App extends React.Component {
 
                 return {data};
             });
-        }).then(callback);
+        }).then(callback).catch(alert);
     }
 
 
