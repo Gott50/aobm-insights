@@ -10,7 +10,7 @@ export default class App extends React.Component {
         minDiff: 10000,
         minMargin: 10,
         maxAge: 1,
-        timeout: 1000,
+        timeout: 10000,
     }
 
     constructor(props) {
