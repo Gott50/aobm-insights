@@ -1,6 +1,7 @@
 import React from 'react';
 import items from './items';
 import * as async from "async";
+import notification from './notification.m4a'
 
 export default class App extends React.Component {
     state = {
@@ -38,7 +39,7 @@ export default class App extends React.Component {
                     </tbody>
                 </table>
                 <audio ref={(audio) => {this.audio = audio;}}>
-                    <source src="/notification.m4a" type="audio/mpeg"/>
+                    <source src={notification} type="audio/mpeg"/>
                 </audio>
             </div>
         );
