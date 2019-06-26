@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/aobm-insights/static/css/main.6bf34bdc.chunk.css",
+    "main.js": "/aobm-insights/static/js/main.bd391362.chunk.js",
+    "main.js.map": "/aobm-insights/static/js/main.bd391362.chunk.js.map",
+    "runtime~main.js": "/aobm-insights/static/js/runtime~main.4ec5d0b4.js",
+    "runtime~main.js.map": "/aobm-insights/static/js/runtime~main.4ec5d0b4.js.map",
+    "static/js/2.9857981d.chunk.js": "/aobm-insights/static/js/2.9857981d.chunk.js",
+    "static/js/2.9857981d.chunk.js.map": "/aobm-insights/static/js/2.9857981d.chunk.js.map",
+    "index.html": "/aobm-insights/index.html",
+    "precache-manifest.c60cc522b76b7b3c029a148f62d7e861.js": "/aobm-insights/precache-manifest.c60cc522b76b7b3c029a148f62d7e861.js",
+    "service-worker.js": "/aobm-insights/service-worker.js",
+    "static/css/main.6bf34bdc.chunk.css.map": "/aobm-insights/static/css/main.6bf34bdc.chunk.css.map"
+  }
+}
