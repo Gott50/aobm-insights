@@ -10,6 +10,7 @@ export default class App extends React.Component {
         minMargin: 10,
         maxAge: 1,
         timeout: 10000,
+        capital: 0,
     }
 
     constructor(props) {
@@ -31,6 +32,9 @@ export default class App extends React.Component {
                 </label>
                 <label>timeout:
                     <input type="number" value={this.state.timeout} onChange={event => this.setState({timeout: Number(event.target.value)})}/>
+                </label>
+                <label>capital:
+                    <input type="number" value={this.state.capital} onChange={event => this.setState({capital: Number(event.target.value)})}/>
                 </label>
                 <table style={{width: "100%"}}>
                     <tbody>
@@ -73,8 +77,9 @@ export default class App extends React.Component {
                 let data = pData.concat(newData);
                 // data.sort((a, b) => b[5] - a[5]);
 
-                data = data.filter(row => Number(row[5]) >= this.state.minMargin);
-                data = data.filter(row => Number(row[4]) >= this.state.minDiff);
+                if (this.state.minMargin > 0) data = data.filter(row => Number(row[5]) >= this.state.minMargin);
+                if (this.state.minDiff > 0) data = data.filter(row => Number(row[4]) >= this.state.minDiff);
+                if (this.state.capital > 0) data = data.filter(row => Number(row[7]) <= this.state.capital);
                 data = data.filter(row => this.isJoung(row[8]));
 
                 data.sort((a, b) => new Date(b[8]) - new Date(a[8]) || b[5] - a[5]);
