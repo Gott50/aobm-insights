@@ -6,7 +6,7 @@ import notification from './notification.m4a'
 export default class App extends React.Component {
     state = {
         data: [],
-        minDiff: 10000,
+        minDiff: 30000,
         minMargin: 10,
         maxAge: 1,
         timeout: 10000,
